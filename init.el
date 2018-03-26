@@ -10,47 +10,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#ffffff" "#183691" "#969896" "#a71d5d" "#969896" "#969896" "#795da3" "#969896"])
- '(custom-enabled-themes (quote (paper)))
- '(custom-safe-themes
-   (quote
-    ("663a653b805b97978c624687b67861f80dddceffc3ae434aa4c60bd22d12e70b" "9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "3b5ce826b9c9f455b7c4c8bff22c020779383a12f2f57bf2eb25139244bb7290" default)))
- '(fci-rule-color "#969896")
- '(hl-sexp-background-color "#efebe9")
- '(nrepl-message-colors
-   (quote
-    ("#183691" "#969896" "#a71d5d" "#969896" "#0086b3" "#795da3" "#a71d5d" "#969896")))
  '(package-selected-packages
    (quote
-    (paper-theme flycheck neotree json-mode restart-emacs company counsel-projectile counsel ivy projectile evil-org yaml-mode use-package markdown-mode htmlize evil color-theme)))
- '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
+    (flycheck neotree json-mode counsel company ivy projectile counsel-projectile evil-org yaml-mode use-package markdown-mode htmlize evil color-theme)))
  '(show-paren-mode t)
- '(tool-bar-mode nil)
- '(vc-annotate-background "#b0cde7")
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#969896")
-     (40 . "#183691")
-     (60 . "#969896")
-     (80 . "#969896")
-     (100 . "#969896")
-     (120 . "#a71d5d")
-     (140 . "#969896")
-     (160 . "#969896")
-     (180 . "#969896")
-     (200 . "#969896")
-     (220 . "#63a35c")
-     (240 . "#0086b3")
-     (260 . "#795da3")
-     (280 . "#969896")
-     (300 . "#0086b3")
-     (320 . "#969896")
-     (340 . "#a71d5d")
-     (360 . "#969896"))))
- '(vc-annotate-very-old-color "#969896"))
+ '(tool-bar-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -105,6 +69,8 @@
   (require 'use-package))
 (setq use-package-always-ensure t)
 
+(use-package markdown-mode)
+
 (use-package evil
   :init
     (setq evil-want-C-u-scroll t)
@@ -115,9 +81,25 @@
     :init
     (add-hook 'org-mode-hook 'turn-on-auto-fill)
     (setq org-startup-indented 1
-	org-src-fontify-natively t
-	org-src-preserve-indentation t
-	org-src-tab-acts-natively t)
+    org-src-fontify-natively t
+    org-src-preserve-indentation t
+    org-src-tab-acts-natively t)
+    )
+    
+(use-package counsel)
+
+(use-package ivy
+    :init
+    (ivy-mode 1)
+    (global-set-key (kbd "C-s") 'swiper)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "<f1> l") 'counsel-find-library)
+    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    (define-key undo-tree-map (kbd "C-/") nil)  ;; so I can use it later for toggling comments
     )
 
 (use-package projectile
@@ -138,21 +120,8 @@
 	company-tooltip-limit 25)
     )
 
-(use-package ivy
-    :init
-    (ivy-mode 1)
-    (global-set-key (kbd "C-s") 'swiper)
-    (global-set-key (kbd "M-x") 'counsel-M-x)
-    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-    (global-set-key (kbd "<f1> l") 'counsel-find-library)
-    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-    (define-key undo-tree-map (kbd "C-/") nil)  ;; so I can use it later for toggling comments
-    )
-
 ;; wrap up with changing the default directory
 (setq default-directory "~/")
 (global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "C-<") 'neotree-toggle)
+(set-background-color "#EEEEFF")
