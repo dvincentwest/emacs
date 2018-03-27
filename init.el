@@ -10,9 +10,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (flycheck neotree json-mode counsel company ivy projectile counsel-projectile evil-org yaml-mode use-package markdown-mode htmlize evil color-theme)))
+    (magit spacemacs-theme flycheck neotree json-mode counsel company ivy projectile counsel-projectile evil-org yaml-mode use-package markdown-mode htmlize evil color-theme)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 
@@ -91,6 +94,7 @@
 (use-package ivy
     :init
     (ivy-mode 1)
+    (setq ivy-height 15)
     (global-set-key (kbd "C-s") 'swiper)
     (global-set-key (kbd "M-x") 'counsel-M-x)
     (global-set-key (kbd "C-x C-f") 'counsel-find-file)
