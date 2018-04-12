@@ -10,12 +10,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(custom-enabled-themes (quote (spacemacs-light)))
  '(custom-safe-themes
    (quote
-    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (magit spacemacs-theme flycheck neotree json-mode counsel company ivy projectile counsel-projectile evil-org yaml-mode use-package markdown-mode htmlize evil color-theme)))
+    (mmm-mode magit spacemacs-theme flycheck neotree json-mode counsel company ivy projectile counsel-projectile evil-org yaml-mode use-package markdown-mode htmlize evil color-theme)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 
@@ -124,8 +126,27 @@
 	company-tooltip-limit 25)
     )
 
+
+(defun my-mmm-markdown-auto-class (lang &optional submode)
+  "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
+If SUBMODE is not provided, use `LANG-mode' by default."
+  (let ((class (intern (concat "markdown-" lang)))
+        (submode (or submode (intern (concat lang "-mode"))))
+        (front (concat "^```" lang "[\n\r]+"))
+        (back "^```"))
+    (mmm-add-classes (list (list class :submode submode :front front :back back)))
+    (mmm-add-mode-ext-class 'markdown-mode nil class)))
+
+(use-package mmm-mode
+  :init
+  (setq mmm-global-mode 'maybe)
+    ;; Mode names that derive directly from the language name
+    (mapc 'my-mmm-markdown-auto-class
+	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
+	    "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
+  )
+
 ;; wrap up with changing the default directory
-(setq default-directory "~/")
 (global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
 (global-set-key (kbd "C-<") 'neotree-toggle)
-(set-background-color "#EEEEFF")
+(setq default-directory "~/")
