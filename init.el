@@ -11,13 +11,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(custom-enabled-themes (quote (spacemacs-light)))
- '(custom-safe-themes
-   (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+ '(custom-enabled-themes (quote (leuven)))
  '(package-selected-packages
    (quote
-    (mmm-mode magit spacemacs-theme flycheck neotree json-mode counsel company ivy projectile counsel-projectile evil-org yaml-mode use-package markdown-mode htmlize evil color-theme)))
+    (company-quickhelp mmm-mode company-jedi json-mode counsel company ivy projectile counsel-projectile evil-org use-package htmlize evil)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 
@@ -39,7 +36,7 @@
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 ;; scrolling options
 ;; scroll one line at a time (less "jumpy" than defaults)
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 2))) ;; one line at a time
+(setq mouse-wheel-scroll-amount '(4 ((shift) . 10))) ;; one line at a time
 (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
@@ -73,8 +70,6 @@
 (eval-when-compile
   (require 'use-package))
 (setq use-package-always-ensure t)
-
-(use-package markdown-mode)
 
 (use-package evil
   :init
@@ -111,7 +106,7 @@
 (use-package projectile
     :init
     (projectile-mode)
-    (counsel-projectile-mode)
+    ;; (counsel-projectile-mode)
     (setq projectile-completion-system 'ivy)
     )
 
@@ -126,6 +121,16 @@
 	company-tooltip-limit 25)
     )
 
+(use-package company-jedi             ;;; company-mode completion back-end for Python JEDI
+  :config
+  (setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:complete-on-dot t)
+  (setq jedi:use-shortcuts t)
+  (defun config/enable-company-jedi ()
+    (add-to-list 'company-backends 'company-jedi))
+  (add-hook 'python-mode-hook 'config/enable-company-jedi)
+  )
 
 (defun my-mmm-markdown-auto-class (lang &optional submode)
   "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
