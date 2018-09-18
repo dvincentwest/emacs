@@ -12,9 +12,10 @@
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(custom-enabled-themes (quote (leuven)))
+ '(custom-safe-themes (quote (default)))
  '(package-selected-packages
    (quote
-    (company-quickhelp mmm-mode company-jedi json-mode counsel company ivy projectile counsel-projectile evil-org use-package htmlize evil)))
+    (company-quickhelp mmm-mode company-jedi json-mode counsel company ivy evil-org use-package htmlize evil)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 
@@ -103,12 +104,12 @@
     (define-key undo-tree-map (kbd "C-/") nil)  ;; so I can use it later for toggling comments
     )
 
-(use-package projectile
-    :init
-    (projectile-mode)
-    ;; (counsel-projectile-mode)
-    (setq projectile-completion-system 'ivy)
-    )
+;; (use-package projectile
+;;     :init
+;;     (projectile-mode)
+;;     ;; (counsel-projectile-mode)
+;;     (setq projectile-completion-system 'ivy)
+;;     )
 
 (use-package company
     :init
@@ -121,16 +122,21 @@
 	company-tooltip-limit 25)
     )
 
-(use-package company-jedi             ;;; company-mode completion back-end for Python JEDI
+(use-package jedi-core
+  :ensure
   :config
-  (setq jedi:environment-virtualenv (list (expand-file-name "~/.emacs.d/.python-environments/")))
+  (setq jedi:use-shortcuts t) ; M-. and M-,
   (add-hook 'python-mode-hook 'jedi:setup)
-  (setq jedi:complete-on-dot t)
-  (setq jedi:use-shortcuts t)
-  (defun config/enable-company-jedi ()
-    (add-to-list 'company-backends 'company-jedi))
-  (add-hook 'python-mode-hook 'config/enable-company-jedi)
-  )
+  (setq jedi:environment-root "jedi")
+  (setq jedi:environment-virtualenv
+        (append python-environment-virtualenv
+                '("--python" "C:/Miniconda3/python.exe")))
+  (use-package company-jedi
+    :ensure
+    :config
+    (add-hook 'python-mode-hook
+              (lambda () (add-to-list 'company-backends
+                                      'company-jedi)))))
 
 (defun my-mmm-markdown-auto-class (lang &optional submode)
   "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
@@ -153,5 +159,4 @@ If SUBMODE is not provided, use `LANG-mode' by default."
 
 ;; wrap up with changing the default directory
 (global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
-(global-set-key (kbd "C-<") 'neotree-toggle)
 (setq default-directory "~/")
