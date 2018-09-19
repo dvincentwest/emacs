@@ -15,7 +15,7 @@
  '(custom-safe-themes (quote (default)))
  '(package-selected-packages
    (quote
-    (company-quickhelp mmm-mode company-jedi json-mode counsel company ivy evil-org use-package htmlize evil)))
+    (company-anaconda anaconda-mode company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 
@@ -122,21 +122,14 @@
 	company-tooltip-limit 25)
     )
 
-(use-package jedi-core
+(use-package anaconda-mode
   :ensure
-  :config
-  (setq jedi:use-shortcuts t) ; M-. and M-,
-  (add-hook 'python-mode-hook 'jedi:setup)
-  (setq jedi:environment-root "jedi")
-  (setq jedi:environment-virtualenv
-        (append python-environment-virtualenv
-                '("--python" "C:/Miniconda3/python.exe")))
-  (use-package company-jedi
-    :ensure
-    :config
-    (add-hook 'python-mode-hook
-              (lambda () (add-to-list 'company-backends
-                                      'company-jedi)))))
+  :init
+  (add-hook 'python-mode-hook 'anaconda-mode)
+  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+  (add-hook 'python-mode-hook
+	    (lambda () '(add-to-list 'company-backends 'company-anaconda)))
+  )
 
 (defun my-mmm-markdown-auto-class (lang &optional submode)
   "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
