@@ -81,10 +81,22 @@
 (use-package org
     :init
     (add-hook 'org-mode-hook 'turn-on-auto-fill)
-    (setq org-startup-indented 1
-    org-src-fontify-natively t
-    org-src-preserve-indentation t
-    org-src-tab-acts-natively t)
+    (setq
+	org-startup-indented 1
+	org-src-fontify-natively t
+	org-src-preserve-indentation t
+	org-src-tab-acts-natively t
+	;; org-latex-listings 'minted
+	;; org-latex-packages-alist '(("" "minted"))
+	;; org-latex-pdf-process
+	;; '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+	;; 	"pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
+	org-latex-pdf-process
+	'("xelatex -shell-escape -interaction nonstopmode -output-directory %o %"
+	  "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f")
+	)
+
+    (use-package htmlize)
     )
     
 (use-package counsel)
