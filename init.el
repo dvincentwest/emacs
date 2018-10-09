@@ -3,21 +3,13 @@
                     (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
     (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t))
+(setq package-archives
+      '(
+	;; ("melpa" . "https://melpa.org/packages/")
+	("gnu" . "https://elpa.gnu.org/packages/")
+	("org" . "http://orgmode.org/elpa/")
+      ))
 (package-initialize)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(column-number-mode t)
- '(custom-enabled-themes (quote (leuven)))
- '(custom-safe-themes (quote (default)))
- '(package-selected-packages
-   (quote
-    (company-anaconda anaconda-mode company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
- '(show-paren-mode t)
- '(tool-bar-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -86,17 +78,18 @@
 	org-src-fontify-natively t
 	org-src-preserve-indentation t
 	org-src-tab-acts-natively t
-	;; org-latex-listings 'minted
-	;; org-latex-packages-alist '(("" "minted"))
-	;; org-latex-pdf-process
-	;; '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-	;; 	"pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f")
+	org-latex-table-scientific-notation nil
+	org-latex-listings 'minted
+	org-latex-packages-alist '(("" "minted"))
+	org-latex-minted-options
+	'(("frame" "leftline")
+	  ("linenos" "")
+	  ("fontsize" "\\small")
+	  )
 	org-latex-pdf-process
-	'("xelatex -shell-escape -interaction nonstopmode -output-directory %o %"
-	  "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f")
-	)
-
-    (use-package htmlize)
+	'("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+	  "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+	  "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
     )
     
 (use-package counsel)
@@ -134,14 +127,21 @@
 	company-tooltip-limit 25)
     )
 
-(use-package anaconda-mode
+(use-package jedi-core
   :ensure
-  :init
-  (add-hook 'python-mode-hook 'anaconda-mode)
-  (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
-  (add-hook 'python-mode-hook
-	    (lambda () '(add-to-list 'company-backends 'company-anaconda)))
-  )
+  :config
+  (setq jedi:use-shortcuts t) ; M-. and M-,
+  (add-hook 'python-mode-hook 'jedi:setup)
+  (setq jedi:environment-root "jedi")
+  (setq jedi:environment-virtualenv
+        (append python-environment-virtualenv
+                '("--python" "C:/Miniconda3/python.exe")))
+  (use-package company-jedi
+    :ensure
+    :config
+    (add-hook 'python-mode-hook
+              (lambda () (add-to-list 'company-backends
+                                      'company-jedi)))))
 
 (defun my-mmm-markdown-auto-class (lang &optional submode)
   "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
@@ -162,6 +162,23 @@ If SUBMODE is not provided, use `LANG-mode' by default."
 	    "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
   )
 
+(use-package ein)
+
 ;; wrap up with changing the default directory
 (global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
 (setq default-directory "~/")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(custom-enabled-themes (quote (leuven)))
+ '(custom-safe-themes
+   (quote
+    ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" default)))
+ '(package-selected-packages
+   (quote
+    (org jedi-core ein company-quickhelp mmm-mode company-jedi json-mode counsel company ivy evil-org use-package htmlize evil)))
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
