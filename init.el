@@ -176,3 +176,5 @@
 	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
 	    "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
     )
+
+(cd "C:/Coding")
