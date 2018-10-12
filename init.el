@@ -5,11 +5,30 @@
     (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t))
 (setq package-archives
       '(
-	;; ("melpa" . "https://melpa.org/packages/")
+	("melpa" . "https://melpa.org/packages/")
 	("gnu" . "https://elpa.gnu.org/packages/")
-	("org" . "http://orgmode.org/elpa/")
+	;; ("org" . "http://orgmode.org/elpa/")
       ))
 (package-initialize)
+
+;; wrap up with changing the default directory
+(global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
+(setq default-directory "~/")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(custom-enabled-themes (quote (leuven)))
+ '(custom-safe-themes
+   (quote
+    ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" default)))
+ '(package-selected-packages
+   (quote
+    (powerline ranger markdown-mode projectile org company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
+ '(show-paren-mode t)
+ '(tool-bar-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -65,10 +84,12 @@
 (setq use-package-always-ensure t)
 
 (use-package evil
-  :init
+    :init
     (setq evil-want-C-u-scroll t)
     (evil-mode 1)
     )
+
+(use-package powerline)
 
 (use-package org
     :init
@@ -91,11 +112,12 @@
 	  "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
 	  "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
     )
-    
-(use-package counsel)
 
 (use-package ivy
     :init
+    ;; not sure the next two are needed, but whatever
+    (use-package counsel)
+    (use-package swiper)
     (ivy-mode 1)
     (setq ivy-height 15)
     (global-set-key (kbd "C-s") 'swiper)
@@ -109,12 +131,20 @@
     (define-key undo-tree-map (kbd "C-/") nil)  ;; so I can use it later for toggling comments
     )
 
-;; (use-package projectile
-;;     :init
-;;     (projectile-mode)
-;;     ;; (counsel-projectile-mode)
-;;     (setq projectile-completion-system 'ivy)
-;;     )
+(use-package projectile
+    :init
+    (projectile-mode)
+    (counsel-projectile-mode)
+    (setq projectile-completion-system 'ivy)
+    )
+
+(use-package ranger
+    :init
+    )
+
+(use-package markdown-mode
+    :init
+    )
 
 (use-package company
     :init
@@ -127,58 +157,21 @@
 	company-tooltip-limit 25)
     )
 
-(use-package jedi-core
-  :ensure
-  :config
-  (setq jedi:use-shortcuts t) ; M-. and M-,
-  (add-hook 'python-mode-hook 'jedi:setup)
-  (setq jedi:environment-root "jedi")
-  (setq jedi:environment-virtualenv
-        (append python-environment-virtualenv
-                '("--python" "C:/Miniconda3/python.exe")))
-  (use-package company-jedi
-    :ensure
-    :config
-    (add-hook 'python-mode-hook
-              (lambda () (add-to-list 'company-backends
-                                      'company-jedi)))))
-
-(defun my-mmm-markdown-auto-class (lang &optional submode)
-  "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
-If SUBMODE is not provided, use `LANG-mode' by default."
-  (let ((class (intern (concat "markdown-" lang)))
-        (submode (or submode (intern (concat lang "-mode"))))
-        (front (concat "^```" lang "[\n\r]+"))
-        (back "^```"))
-    (mmm-add-classes (list (list class :submode submode :front front :back back)))
-    (mmm-add-mode-ext-class 'markdown-mode nil class)))
-
 (use-package mmm-mode
-  :init
-  (setq mmm-global-mode 'maybe)
-    ;; Mode names that derive directly from the language name
+    :init
+
+    (defun my-mmm-markdown-auto-class (lang &optional submode)
+    "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
+    If SUBMODE is not provided, use `LANG-mode' by default."
+    (let ((class (intern (concat "markdown-" lang)))
+	    (submode (or submode (intern (concat lang "-mode"))))
+	    (front (concat "^```" lang "[\n\r]+"))
+	    (back "^```"))
+	(mmm-add-classes (list (list class :submode submode :front front :back back)))
+	(mmm-add-mode-ext-class 'markdown-mode nil class)))
+
+    (setq mmm-global-mode 'maybe) ;; Mode names that derive directly from the language name
     (mapc 'my-mmm-markdown-auto-class
 	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
 	    "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
-  )
-
-(use-package ein)
-
-;; wrap up with changing the default directory
-(global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
-(setq default-directory "~/")
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(column-number-mode t)
- '(custom-enabled-themes (quote (leuven)))
- '(custom-safe-themes
-   (quote
-    ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" default)))
- '(package-selected-packages
-   (quote
-    (org jedi-core ein company-quickhelp mmm-mode company-jedi json-mode counsel company ivy evil-org use-package htmlize evil)))
- '(show-paren-mode t)
- '(tool-bar-mode nil))
+    )
