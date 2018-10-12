@@ -11,9 +11,6 @@
       ))
 (package-initialize)
 
-;; wrap up with changing the default directory
-(global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
-(setq default-directory "~/")
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -26,9 +23,13 @@
     ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" default)))
  '(package-selected-packages
    (quote
-    (counsel-projectile powerline ranger markdown-mode projectile org company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
+    (elpy counsel-projectile powerline ranger markdown-mode projectile org company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
+
+(global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
+(setq default-directory "~/")
+(global-display-line-numbers-mode)
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -89,7 +90,10 @@
     (evil-mode 1)
     )
 
-(use-package powerline)
+(use-package powerline
+    :init
+    (powerline-default-theme)
+    )
 
 (use-package org
     :init
@@ -139,14 +143,6 @@
     (setq projectile-completion-system 'ivy)
     )
 
-(use-package ranger
-    :init
-    )
-
-(use-package markdown-mode
-    :init
-    )
-
 (use-package company
     :init
     (company-mode)
@@ -158,9 +154,16 @@
 	company-tooltip-limit 25)
     )
 
+(use-package ranger
+    :init
+    )
+
+(use-package markdown-mode
+    :init
+    )
+
 (use-package mmm-mode
     :init
-
     (defun my-mmm-markdown-auto-class (lang &optional submode)
     "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
     If SUBMODE is not provided, use `LANG-mode' by default."
@@ -170,11 +173,15 @@
 	    (back "^```"))
 	(mmm-add-classes (list (list class :submode submode :front front :back back)))
 	(mmm-add-mode-ext-class 'markdown-mode nil class)))
-
     (setq mmm-global-mode 'maybe) ;; Mode names that derive directly from the language name
     (mapc 'my-mmm-markdown-auto-class
 	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
 	    "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
     )
+
+(use-package elpy
+  :init
+  (elpy-enable)
+  )
 
 (cd "C:/Coding")
