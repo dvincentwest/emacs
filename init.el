@@ -26,7 +26,7 @@
     ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" default)))
  '(package-selected-packages
    (quote
-    (powerline ranger markdown-mode projectile org company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
+    (counsel-projectile powerline ranger markdown-mode projectile org company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 
@@ -116,8 +116,9 @@
 (use-package ivy
     :init
     ;; not sure the next two are needed, but whatever
-    (use-package counsel)
-    (use-package swiper)
+    (use-package counsel :init)
+    (use-package swiper :init)
+    (use-package counsel-projectile :init)
     (ivy-mode 1)
     (setq ivy-height 15)
     (global-set-key (kbd "C-s") 'swiper)
