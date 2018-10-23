@@ -29,7 +29,8 @@
 
 (global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
 (setq default-directory "~/")
-(global-display-line-numbers-mode)
+(when (version<= "26.0.50" emacs-version )
+    (global-display-line-numbers-mode))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
