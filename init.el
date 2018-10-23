@@ -185,4 +185,3 @@
   (elpy-enable)
   )
 
-(cd "C:/Coding")
