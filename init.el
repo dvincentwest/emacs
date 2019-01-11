@@ -23,7 +23,7 @@
     ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "43c1a8090ed19ab3c0b1490ce412f78f157d69a29828aa977dae941b994b4147" default)))
  '(package-selected-packages
    (quote
-    (elpy counsel-projectile powerline ranger markdown-mode projectile org company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
+    (counsel-projectile powerline ranger markdown-mode projectile org company-quickhelp mmm-mode json-mode counsel company ivy evil-org use-package htmlize evil)))
  '(show-paren-mode t)
  '(tool-bar-mode nil))
 
@@ -37,11 +37,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- (if (eq system-type 'windows-nt)
-   '(default ((t (:family "Consolas" :foundry "outline" :slant normal :weight normal :height 113 :width normal))))
-   '(default ((t (:family "Inconsolata" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal))))
-   )
- )
+ '(default ((t (:family "Ubuntu Mono" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal)))))
+
+(if (eq system-type 'windows-nt)
+    (custom-set-faces
+    ;; custom-set-faces was added by Custom.
+    ;; If you edit it by hand, you could mess it up, so be careful.
+    ;; Your init file should contain only one such instance.
+    ;; If there is more than one, they won't work right.
+    '(default ((t (:family "Consolas" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal))))))
 
 ;; inhibit startup screen
 (setq inhibit-startup-screen t
@@ -183,8 +187,3 @@
 	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
 	    "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
     )
-
-(use-package elpy
-  :init
-  (elpy-enable)
-  )
