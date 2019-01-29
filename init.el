@@ -146,6 +146,7 @@
   (projectile-mode)
   (counsel-projectile-mode)
   (setq projectile-completion-system 'ivy)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   )
 
 (use-package company
