@@ -37,7 +37,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Ubuntu Mono" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "Hack" :foundry "SRC" :slant normal :weight normal :height 90 :width normal)))))
 
 (if (eq system-type 'windows-nt)
     (custom-set-faces
@@ -133,7 +133,7 @@
     (use-package swiper :init)
     (use-package counsel-projectile :init)
     (ivy-mode 1)
-    (setq ivy-height 15)
+    (setq ivy-height 20)
     (global-set-key (kbd "C-s") 'swiper)
     (global-set-key (kbd "M-x") 'counsel-M-x)
     (global-set-key (kbd "C-x C-f") 'counsel-find-file)
