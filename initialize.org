@@ -1,0 +1,284 @@
+#+TITLE: Vince's Emacs Configuration
+#+AUTHOR: Vince West
+
+* Sensible Defaults
+** Default Settings
+#+BEGIN_SRC emacs-lisp
+
+(add-hook 'window-setup-hook 'toggle-frame-maximized t)
+
+;; inhibit startup screen
+(setq inhibit-startup-screen t
+      ;; Show *scratch* on start
+      initial-buffer-choice t)
+
+(setq default-directory "~/")
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
+
+(when window-system
+  ;(blink-cursor-mode 0)                           ; Disable the cursor blinking
+  (scroll-bar-mode 0)                             ; Disable the scroll bar
+  (tool-bar-mode 0)                               ; Disable the tool bar
+  (tooltip-mode 0))                               ; Disable the tooltips
+
+(setq-default
+ mode-require-final-newline 'visit                ; Add a newline at EOF on visit
+ tab-width 4                                      ; Set width for tabs
+ )
+(setq line-number-mode t)                         ; Enable line numbers in the mode-line
+(setq column-number-mode t)                       ; Enable column numbers in the mode-line
+
+(prefer-coding-system 'utf-8)
+(setq column-fill 80)
+(column-number-mode)
+(autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+;; scrolling options
+;; scroll one line at a time (less "jumpy" than defaults)
+(setq mouse-wheel-scroll-amount '(4 ((shift) . 10))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
+(setq backup-directory-alist  ;; backup files go in a dedicated directory
+      `(("." . ,(concat user-emacs-directory "backups"))))
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+(global-set-key (kbd "C-S-b") 'ibuffer)
+
+; Garbage-collect on focus-out, Emacs /should/ feel snappier.
+(add-hook 'focus-out-hook #'garbage-collect)
+
+#+END_SRC
+
+** Load =custom.el=
+
+One is able to use the customization interface that is bundled within Emacs. It
+is meant to help people who are not familiar with Emacs Lisp in the
+configuration of Emacs itself. By default, changes in the customization will be
+automatically detected and appended at the end of the configuration file,
+=init.el=.
+
+Since that in my case, the actual configuration file is a new one, crafted by
+=org-mode=, adding code at the end of =init.el= might mess things up. The
+following tells Emacs to add extra code in another file that would be then
+loaded, if existing.
+
+#+BEGIN_SRC emacs-lisp
+(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
+#+END_SRC
+
+* Appearance
+#+BEGIN_SRC emacs-lisp
+
+(load-theme 'leuven)
+; (set-face-attribute 'font-lock-comment-face nil :italic t)
+; (set-face-attribute 'font-lock-doc-face nil :italic t)
+; (set-face-attribute 'default nil :height mp/font-size-default :family mp/font-family)
+; (set-face-attribute 'header-line nil :height mp/font-size-header-line)
+; (set-face-attribute 'mode-line nil :height mp/font-size-mode-line)
+; (set-face-attribute 'mode-line-inactive nil :height mp/font-size-mode-line)
+
+#+END_SRC
+
+* Packages
+** Evil Mode
+#+BEGIN_SRC emacs-lisp
+
+(use-package evil
+  :init
+  (setq evil-want-C-u-scroll t)
+  (evil-mode)
+  )
+
+#+END_SRC
+
+** Org Mode
+#+BEGIN_SRC emacs-lisp
+
+(use-package org
+  :init
+  (add-hook 'org-mode-hook 'turn-on-auto-fill)
+  (setq
+   org-startup-indented 1
+   org-src-fontify-natively t
+   org-src-preserve-indentation t
+   org-src-tab-acts-natively t
+   org-latex-table-scientific-notation nil
+   org-latex-listings 'minted
+   org-latex-packages-alist '(("" "minted"))
+   org-latex-minted-options
+   '(("frame" "leftline")
+     ("linenos" "")
+     ("fontsize" "\\small")
+     )
+   org-latex-pdf-process
+   '("xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+     "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  )
+
+#+END_SRC
+
+** Ivy
+#+BEGIN_SRC emacs-lisp
+
+(use-package ivy
+  :init
+  (use-package counsel :init)
+  (use-package swiper :init)
+  (use-package counsel-projectile :init)
+  (ivy-mode 1)
+  (setq ivy-height 20)
+  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  (define-key undo-tree-map (kbd "C-/") nil)  ;; so I can use it later for toggling comments
+  )
+
+#+END_SRC
+
+** Projectile
+#+BEGIN_SRC emacs-lisp
+
+(use-package projectile
+  :init
+  (projectile-mode)
+  (counsel-projectile-mode)
+  (setq projectile-completion-system 'ivy)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  )
+
+#+END_SRC
+
+** elpy
+#+BEGIN_SRC emacs-lisp
+
+(use-package elpy
+  :init
+  (elpy-enable)
+  :config
+  (setq elpy-rpc-python-command "python3")
+  (setq python-shell-interpreter "python3")
+  )
+
+#+END_SRC
+
+** Company
+#+BEGIN_SRC emacs-lisp
+
+(use-package company
+  :init
+  (company-mode)
+  (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-selection-wrap-around t
+	company-tooltip-align-annotations t
+	company-idle-delay 0.2
+	company-minimum-prefix-length 2
+	company-tooltip-limit 25)
+  )
+
+#+END_SRC
+
+** Ledger-Mode
+#+BEGIN_SRC emacs-lisp
+
+(use-package ledger-mode
+  :init
+  :config
+  (defun ledger-revert ()
+    (interactive)
+    (if not (eq major-mode 'ledger-mode)
+      (ledger-mode)
+      )
+    (revert-buffer t t t)
+    (ledger-mode-clean-buffer)
+    )
+  )
+
+#+END_SRC
+
+** Powerline
+#+BEGIN_SRC emacs-lisp
+
+(use-package powerline
+  :init
+  (powerline-default-theme)
+  )
+
+#+END_SRC
+
+** Ranger
+#+BEGIN_SRC emacs-lisp
+
+(use-package ranger)
+
+#+END_SRC
+
+** Markdown Related
+#+BEGIN_SRC emacs-lisp
+
+(use-package markdown-mode)
+(use-package mmm-mode
+  :init
+  (defun my-mmm-markdown-auto-class (lang &optional submode)
+    "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
+    If SUBMODE is not provided, use `LANG-mode' by default."
+    (let ((class (intern (concat "markdown-" lang)))
+	  (submode (or submode (intern (concat lang "-mode"))))
+	  (front (concat "^```" lang "[\n\r]+"))
+	  (back "^```"))
+      (mmm-add-classes (list (list class :submode submode :front front :back back)))
+      (mmm-add-mode-ext-class 'markdown-mode nil class)))
+  (setq mmm-global-mode 'maybe) ;; Mode names that derive directly from the language name
+  (mapc 'my-mmm-markdown-auto-class
+	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
+	  "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
+  )
+
+#+END_SRC
+* Functions
+#+BEGIN_SRC emacs-lisp
+
+(global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
+
+;; special function to toggle comments
+(defun comment-or-uncomment-region-or-line ()
+  "Comments or uncomments the region or the current line if there's no active region."
+  (interactive)
+  (let (beg end)
+    (if (region-active-p)
+	(setq beg (region-beginning) end (region-end))
+      (setq beg (line-beginning-position) end (line-end-position)))
+    (comment-or-uncomment-region beg end)))
+
+#+END_SRC
+* WindowsSettings
+Some settings are particular to Windows so let's put those here:
+
+#+BEGIN_SRC emacs-lisp
+
+(when (or (eq system-type 'windows-nt) (eq system-type 'msdos))
+  (setenv "PATH" (concat "C:\\Users\\A3R7LZZ\\Programs\\Cygwin\\bin;" (getenv "PATH")))
+  )
+
+(if (eq system-type 'windows-nt)
+    (custom-set-faces
+     '(default ((t (:family "Consolas" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal))))))
+
+#+END_SRC
+* Miscellaneous
+#+BEGIN_SRC emacs-lisp
+
+; can have some trouble with fonts if this isn't set
+(define-key special-event-map [config-changed-event] #'ignore)
+
+#+END_SRC
