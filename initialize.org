@@ -195,14 +195,14 @@ loaded, if existing.
   :init
   :config
   (defun ledger-revert ()
-    (interactive)
-    (if not (eq major-mode 'ledger-mode)
-      (ledger-mode)
-      )
-    (revert-buffer t t t)
-    (ledger-mode-clean-buffer)
-    )
-  )
+	(interactive)
+	(if not (eq major-mode 'ledger-mode)
+	  (ledger-mode)
+	  )
+	(revert-buffer t t t)
+	(ledger-mode-clean-buffer)
+	)
+  
 
 #+END_SRC
 
