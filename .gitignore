@@ -2,3 +2,8 @@
 recentf
 *.cache
 *.eld
+custom.el
+recent
+session.*
+tramp
+initialize.el
