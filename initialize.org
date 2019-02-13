@@ -17,17 +17,17 @@
   (global-display-line-numbers-mode))
 
 (when window-system
-  ;(blink-cursor-mode 0)                           ; Disable the cursor blinking
+  ;(blink-cursor-mode 0)                          ; Disable the cursor blinking
   (scroll-bar-mode 0)                             ; Disable the scroll bar
   (tool-bar-mode 0)                               ; Disable the tool bar
   (tooltip-mode 0))                               ; Disable the tooltips
 
 (setq-default
- mode-require-final-newline 'visit                ; Add a newline at EOF on visit
- tab-width 4                                      ; Set width for tabs
- )
+ mode-require-final-newline 'visit-save           ; Add a newline at EOF on visit-save
+ tab-width 4)                                     ; Set width for tabs
 (setq line-number-mode t)                         ; Enable line numbers in the mode-line
 (setq column-number-mode t)                       ; Enable column numbers in the mode-line
+(setq show-paren-mode t)                          ; Highlight matching parentheses
 
 (prefer-coding-system 'utf-8)
 (setq column-fill 80)
@@ -49,6 +49,7 @@
 
 ; Garbage-collect on focus-out, Emacs /should/ feel snappier.
 (add-hook 'focus-out-hook #'garbage-collect)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 #+END_SRC
 
@@ -205,13 +206,10 @@ loaded, if existing.
   :config
   (defun ledger-revert ()
 	(interactive)
-	(if not (eq major-mode 'ledger-mode)
-	  (ledger-mode)
-	  )
+	(if (not (eq major-mode 'ledger-mode))
+	  (ledger-mode))
 	(revert-buffer t t t)
-	(ledger-mode-clean-buffer)
-	)
-  )
+	(ledger-mode-clean-buffer)))
 
 #+END_SRC
 
