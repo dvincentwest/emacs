@@ -75,13 +75,9 @@ loaded, if existing.
 * Appearance
 #+BEGIN_SRC emacs-lisp
 
+;; Other than loading the theme, I prefer to set font attributes
+;; via the menu which then gets saved to custom.el
 (load-theme 'leuven)
-; (set-face-attribute 'font-lock-comment-face nil :italic t)
-; (set-face-attribute 'font-lock-doc-face nil :italic t)
-; (set-face-attribute 'default nil :height mp/font-size-default :family mp/font-family)
-; (set-face-attribute 'header-line nil :height mp/font-size-header-line)
-; (set-face-attribute 'mode-line nil :height mp/font-size-mode-line)
-; (set-face-attribute 'mode-line-inactive nil :height mp/font-size-mode-line)
 
 #+END_SRC
 
@@ -91,9 +87,14 @@ loaded, if existing.
 
 (use-package evil
   :init
-  (setq evil-want-C-u-scroll t)
-  (evil-mode)
-  )
+  (setq evil-want-C-u-scroll t
+		evil-search-module 'evil-search)
+  (evil-mode))
+
+(use-package evil-surround
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
 #+END_SRC
 
