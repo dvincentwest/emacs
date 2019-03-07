@@ -234,7 +234,24 @@ loaded, if existing.
 ** Markdown Related
 #+BEGIN_SRC emacs-lisp
 
-(use-package markdown-mode)
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command
+		      (concat
+		       "pandoc"
+		       " --from=markdown --to=html"
+		       " --standalone --mathjax --highlight-style=pygments"))
+		(setq markdown-xhtml-header-content
+			  (concat "<script type=\"text/javascript\" async"
+					  " src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/"
+					  "2.7.1/MathJax.js?config=TeX-MML-AM_CHTML\">"
+					  "</script>"))
+		)
+
 (use-package mmm-mode
   :init
   (defun my-mmm-markdown-auto-class (lang &optional submode)
