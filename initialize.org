@@ -4,7 +4,6 @@
 * Sensible Defaults
 ** Default Settings
 #+BEGIN_SRC emacs-lisp
-
 (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
 ;; inhibit startup screen
@@ -22,6 +21,7 @@
   (tool-bar-mode 0)                               ; Disable the tool bar
   (tooltip-mode 0))                               ; Disable the tooltips
 
+(setq tool-bar-mode nil)
 (setq-default
  mode-require-final-newline 'visit-save           ; Add a newline at EOF on visit-save
  tab-width 4)                                     ; Set width for tabs
@@ -74,33 +74,30 @@ loaded, if existing.
 
 * Appearance
 #+BEGIN_SRC emacs-lisp
-
 ;; Other than loading the theme, I prefer to set font attributes
 ;; via the menu which then gets saved to custom.el
 (load-theme 'leuven)
-
 #+END_SRC
 
 * Packages
 ** Evil Mode
 #+BEGIN_SRC emacs-lisp
-
 (use-package evil
   :init
   (setq evil-want-C-u-scroll t
 		evil-search-module 'evil-search)
-  (evil-mode))
+  :config
+  (evil-mode)
+  )
 
 (use-package evil-surround
   :ensure t
   :config
   (global-evil-surround-mode 1))
-
 #+END_SRC
 
 ** Org Mode
 #+BEGIN_SRC emacs-lisp
-
 (use-package org
   :init
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
@@ -122,19 +119,15 @@ loaded, if existing.
      "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"
      "xelatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
   )
-
 #+END_SRC
 
 ** Ivy
 #+BEGIN_SRC emacs-lisp
-
 (use-package ivy
   :init
-  (use-package counsel :init)
-  (use-package swiper :init)
-  (use-package counsel-projectile :init)
-  (ivy-mode 1)
   (setq ivy-height 20)
+  (ivy-mode 1)
+  :config
   (global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
@@ -146,62 +139,59 @@ loaded, if existing.
   (define-key undo-tree-map (kbd "C-/") nil)  ;; so I can use it later for toggling comments
   )
 
-#+END_SRC
+(use-package counsel :init)
+(use-package swiper :init)
+(use-package counsel-projectile :init)
+  #+END_SRC
 
 ** Projectile
 #+BEGIN_SRC emacs-lisp
-
 (use-package projectile
   :init
-  (projectile-mode)
-  (counsel-projectile-mode)
   (setq projectile-completion-system 'ivy)
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config
   )
-
+(projectile-mode)
+(counsel-projectile-mode)
 #+END_SRC
 
 ** Magit
 #+BEGIN_SRC emacs-lisp
-
 (use-package magit
   :init
   (use-package evil-magit)
   )
-
 #+END_SRC
+
 ** elpy
 #+BEGIN_SRC emacs-lisp
-
 (use-package elpy
   :init
   (elpy-enable)
+  (if (not (eq system-type 'windows-nt))
+	  ((setq elpy-rpc-python-command "python3")
+	   (setq python-shell-interpreter "python3"))
+	)
   :config
-  (setq elpy-rpc-python-command "python3")
-  (setq python-shell-interpreter "python3")
   )
-
 #+END_SRC
 
 ** Company
 #+BEGIN_SRC emacs-lisp
-
 (use-package company
-  :init
-  (company-mode)
-  (add-hook 'after-init-hook 'global-company-mode)
+  :init (add-hook 'after-init-hook 'global-company-mode)
+  ;; (company-mode)
   (setq company-selection-wrap-around t
-	company-tooltip-align-annotations t
-	company-idle-delay 0.2
-	company-minimum-prefix-length 2
-	company-tooltip-limit 25)
+		company-tooltip-align-annotations t
+		company-idle-delay 0.2
+		company-minimum-prefix-length 2
+		company-tooltip-limit 25)
   )
-
 #+END_SRC
 
 ** Ledger-Mode
 #+BEGIN_SRC emacs-lisp
-
 (use-package ledger-mode
   :init
   :config
@@ -211,29 +201,22 @@ loaded, if existing.
 	  (ledger-mode))
 	(revert-buffer t t t)
 	(ledger-mode-clean-buffer)))
-
 #+END_SRC
 
 ** Powerline
 #+BEGIN_SRC emacs-lisp
-
 (use-package powerline
-  :init
-  (powerline-default-theme)
+  :init (powerline-default-theme)
   )
-
 #+END_SRC
 
 ** Ranger
 #+BEGIN_SRC emacs-lisp
-
 (use-package ranger)
-
 #+END_SRC
 
 ** Markdown Related
 #+BEGIN_SRC emacs-lisp
-
 (use-package markdown-mode)
 (use-package mmm-mode
   :init
@@ -251,14 +234,10 @@ loaded, if existing.
 	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
 	  "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
   )
-
 #+END_SRC
+
 * Functions
 #+BEGIN_SRC emacs-lisp
-
-(global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
-
-;; special function to toggle comments
 (defun comment-or-uncomment-region-or-line ()
   "Comments or uncomments the region or the current line if there's no active region."
   (interactive)
@@ -268,12 +247,13 @@ loaded, if existing.
       (setq beg (line-beginning-position) end (line-end-position)))
     (comment-or-uncomment-region beg end)))
 
+(global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
 #+END_SRC
+
 * WindowsSettings
 Some settings are particular to Windows so let's put those here:
 
 #+BEGIN_SRC emacs-lisp
-
 (when (or (eq system-type 'windows-nt) (eq system-type 'msdos))
   (setenv "PATH" (concat "C:\\Users\\A3R7LZZ\\Programs\\Cygwin\\bin;" (getenv "PATH")))
   )
@@ -282,11 +262,10 @@ Some settings are particular to Windows so let's put those here:
     (custom-set-faces
      '(default ((t (:family "Consolas" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal))))))
 
+;; (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
 #+END_SRC
 * Miscellaneous
 #+BEGIN_SRC emacs-lisp
-
 ; can have some trouble with fonts if this isn't set
 (define-key special-event-map [config-changed-event] #'ignore)
-
 #+END_SRC
