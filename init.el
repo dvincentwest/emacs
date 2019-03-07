@@ -4,12 +4,9 @@
                     (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t))
-(setq package-archives
-      '(
-	("melpa" . "https://melpa.org/packages/")
-	("gnu" . "https://elpa.gnu.org/packages/")
-	;; ("org" . "http://orgmode.org/elpa/")
-	))
+(setq package-archives '(("melpa" . "https://stable.melpa.org/packages/")
+						 ("gnu" . "https://elpa.gnu.org/packages/")
+						 ))
 (package-initialize)
 
 ;; use-package settings
