@@ -77,7 +77,7 @@ loaded, if existing.
 
 ;; Other than loading the theme, I prefer to set font attributes
 ;; via the menu which then gets saved to custom.el
-(load-theme 'leuven)
+(load-theme 'deeper-blue)
 
 #+END_SRC
 
@@ -106,6 +106,7 @@ loaded, if existing.
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
   (setq
    org-startup-indented 1
+   org-blank-before-new-entry nil
    org-src-fontify-natively t
    org-src-preserve-indentation t
    org-src-tab-acts-natively t
