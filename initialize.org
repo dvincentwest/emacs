@@ -2,7 +2,7 @@
 #+AUTHOR: Vince West
 
 * Sensible Defaults
-** COMMENT Default Settings
+** Default Settings
 #+BEGIN_SRC emacs-lisp
 (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
@@ -31,7 +31,7 @@
 (show-paren-mode)
 
 (prefer-coding-system 'utf-8)
-(setq column-fill 80)
+(setq fill-column 80)
 (column-number-mode)
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -51,7 +51,6 @@
 ; Garbage-collect on focus-out, Emacs /should/ feel snappier.
 (add-hook 'focus-out-hook #'garbage-collect)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 #+END_SRC
 
 ** Load =custom.el=
@@ -73,7 +72,7 @@ loaded, if existing.
   (load custom-file))
 #+END_SRC
 
-* Appearance
+** Appearance
 #+BEGIN_SRC emacs-lisp
 ;; Other than loading the theme, I prefer to set font attributes
 ;; via the menu which then gets saved to custom.el
@@ -104,7 +103,8 @@ loaded, if existing.
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
   (setq
    org-startup-indented 1
-   org-blank-before-new-entry nil
+   org-blank-before-new-entry '((heading . auto)
+							   (plain-list-item . auto))
    org-src-fontify-natively t
    org-src-preserve-indentation t
    org-src-tab-acts-natively t
