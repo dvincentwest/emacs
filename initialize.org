@@ -176,11 +176,12 @@ loaded, if existing.
   (setq python-shell-interpreter "ipython"
 		python-shell-interpreter-args "-i --simple-prompt")
   (elpy-enable)
-  ;; (if (not (eq system-type 'windows-nt))
-  ;; 	  (setq elpy-rpc-python-command "ipython")
-  ;; 	  (setq python-shell-interpreter "ipython")
-  ;; 	)
+  (if (not (eq system-type 'windows-nt))
+  	  (setq elpy-rpc-python-command "python")
+  	  ;; (setq python-shell-interpreter "ipython")
+  	)
   :config
+  (define-key elpy-mode-map (kbd "C-c .") 'elpy-goto-definition)
   )
 
 #+END_SRC
