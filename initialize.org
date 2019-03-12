@@ -52,7 +52,10 @@
 (add-hook 'focus-out-hook #'garbage-collect)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 #+END_SRC
-
+** Dired Settings
+#+BEGIN_SRC emacs-lisp
+(put 'dired-find-alternate-file 'disabled nil)
+#+END_SRC
 ** Load =custom.el=
 
 One is able to use the customization interface that is bundled within Emacs. It
@@ -170,13 +173,16 @@ loaded, if existing.
 #+BEGIN_SRC emacs-lisp
 (use-package elpy
   :init
+  (setq python-shell-interpreter "ipython"
+		python-shell-interpreter-args "-i --simple-prompt")
   (elpy-enable)
-  (if (not (eq system-type 'windows-nt))
-	  (setq elpy-rpc-python-command "python3")
-	  (setq python-shell-interpreter "python3")
-	)
+  ;; (if (not (eq system-type 'windows-nt))
+  ;; 	  (setq elpy-rpc-python-command "ipython")
+  ;; 	  (setq python-shell-interpreter "ipython")
+  ;; 	)
   :config
   )
+
 #+END_SRC
 
 ** Company
