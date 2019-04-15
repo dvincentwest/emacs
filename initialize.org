@@ -79,7 +79,12 @@ loaded, if existing.
 #+BEGIN_SRC emacs-lisp
 ;; Other than loading the theme, I prefer to set font attributes
 ;; via the menu which then gets saved to custom.el
-(load-theme 'deeper-blue)
+(use-package zenburn-theme
+  :ensure t
+  ;; :defer t  ; use if you don't want to load the theme
+  )
+;; (load-theme 'deeper-blue)
+;; # (load-theme 'zenburn)
 #+END_SRC
 
 * Packages
