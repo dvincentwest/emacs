@@ -18,3 +18,8 @@
 (setq use-package-always-ensure t)
 
 (org-babel-load-file (expand-file-name "initialize.org" user-emacs-directory))
+
+(if (eq system-type 'windows-nt)
+	(org-babel-load-file (expand-file-name "windows.org" user-emacs-directory))
+	(org-babel-load-file (expand-file-name "nonwindows.org" user-emacs-directory))
+  )

@@ -7,3 +7,5 @@ recent
 session.*
 tramp
 initialize.el
+windows.el
+nonwindows.el

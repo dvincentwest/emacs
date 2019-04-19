@@ -1,0 +1,12 @@
+#+TITLE: Vince's Emacs Configuration For Windows Only
+#+AUTHOR: Vince West
+
+* WindowsSettings
+Some settings are particular to Windows so let's put those here:
+
+#+BEGIN_SRC emacs-lisp
+(setenv "PATH" (concat "C:\\Users\\A3R7LZZ\\Programs\\Cygwin\\bin;" (getenv "PATH")))
+(custom-set-faces
+     '(default ((t (:family "Consolas" :foundry "PfEd" :slant normal :weight normal :height 120 :width normal)))))
+;; (define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
+#+END_SRC
