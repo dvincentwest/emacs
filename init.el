@@ -4,7 +4,9 @@
                     (not (gnutls-available-p))))
        (proto (if no-ssl "http" "https")))
   (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t))
-(setq package-archives '(("melpa" . "https://stable.melpa.org/packages/")
+(setq package-archives '(
+						 ("melpa" . "https://melpa.org/packages/")
+						 ;; ("melpa" . "https://stable.melpa.org/packages/")
 						 ("gnu" . "https://elpa.gnu.org/packages/")
 						 ))
 (package-initialize)
@@ -23,3 +25,4 @@
 	(org-babel-load-file (expand-file-name "windows.org" user-emacs-directory))
 	(org-babel-load-file (expand-file-name "nonwindows.org" user-emacs-directory))
   )
+(put 'narrow-to-region 'disabled nil)
