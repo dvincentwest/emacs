@@ -17,7 +17,7 @@
 
 ** Ag
 #+BEGIN_SRC emacs-lisp
-(use-pacage ag :ensure t)
+(use-package ag :ensure t)
 #+END_SRC
 
 ** Magit
