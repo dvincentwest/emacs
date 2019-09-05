@@ -29,6 +29,7 @@
 (setq line-number-mode t)                         ; Enable line numbers in the mode-line
 (setq column-number-mode t)                       ; Enable column numbers in the mode-line
 (setq show-paren-mode t)                          ; Highlight matching parentheses
+(set-default 'truncate-lines t)
 (show-paren-mode)
 
 (prefer-coding-system 'utf-8)
@@ -53,6 +54,7 @@
 ; Garbage-collect on focus-out, Emacs /should/ feel snappier.
 (add-hook 'focus-out-hook #'garbage-collect)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
 #+END_SRC
 ** Dired Settings
 #+BEGIN_SRC emacs-lisp
@@ -235,4 +237,6 @@ loaded, if existing.
 #+BEGIN_SRC emacs-lisp
 ; can have some trouble with fonts if this isn't set
 (define-key special-event-map [config-changed-event] #'ignore)
+
+(setq fortran-line-length 120)
 #+END_SRC
