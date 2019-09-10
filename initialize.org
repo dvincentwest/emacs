@@ -240,3 +240,15 @@ loaded, if existing.
 
 (setq fortran-line-length 120)
 #+END_SRC
+
+* Site-Specific
+
+Look for a file, `custom_byhand.el` in the `.emacs.d` directory that
+would contain non-git-tracked customizations
+
+#+BEGIN_SRC emacs-lisp
+
+(defvar site-el (expand-file-name "custom_byhand.el" user-emacs-directory))
+(if (file-exists-p site-el) (load-file site-el))
+
+#+END_SRC
