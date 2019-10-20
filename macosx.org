@@ -1,0 +1,11 @@
+#+TITLE: Emacs Iniitalization for Mac OSX specifically
+
+#+BEGIN_SRC emacs-lisp
+
+(menu-bar-mode)
+(set-face-attribute 'default nil :family "Monaco")
+(set-face-attribute 'default nil :height 130)
+
+(setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
+
+#+END_SRC

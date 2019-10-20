@@ -21,6 +21,9 @@
 
 (if (eq system-type 'windows-nt)
 	(org-babel-load-file (expand-file-name "windows.org" user-emacs-directory))
-	(org-babel-load-file (expand-file-name "nonwindows.org" user-emacs-directory))
-  )
+  (org-babel-load-file (expand-file-name "nonwindows.org" user-emacs-directory)))
+
+(if (eq system-type 'darwin)
+  (org-babel-load-file (expand-file-name "macosx.org" user-emacs-directory)))
+
 (put 'narrow-to-region 'disabled nil)
