@@ -7,5 +7,6 @@
 (set-face-attribute 'default nil :height 130)
 
 (setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
+(setq exec-path (append '("/Library/TeX/texbin") exec-path))
 
 #+END_SRC
