@@ -26,4 +26,7 @@
 (if (eq system-type 'darwin)
   (org-babel-load-file (expand-file-name "macosx.org" user-emacs-directory)))
 
+(if (file-exists-p "local.org")
+  (org-babel-load-file (expand-file-name "local.org" user-emacs-directory)))
+
 (put 'narrow-to-region 'disabled nil)

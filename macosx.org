@@ -1,12 +1,22 @@
 #+TITLE: Emacs Iniitalization for Mac OSX specifically
 
 #+BEGIN_SRC emacs-lisp
+(setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
+(setq exec-path (append '("/Library/TeX/texbin") exec-path))
+#+END_SRC
 
+
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode)
+  )
+
+(add-hook 'after-init-hook #'global-flycheck-mode)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
 (menu-bar-mode)
 (set-face-attribute 'default nil :family "Monaco")
 (set-face-attribute 'default nil :height 130)
-
-(setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
-(setq exec-path (append '("/Library/TeX/texbin") exec-path))
-
 #+END_SRC
