@@ -20,13 +20,13 @@
 (org-babel-load-file (expand-file-name "initialize.org" user-emacs-directory))
 
 (if (eq system-type 'windows-nt)
-	(org-babel-load-file (expand-file-name "windows.org" user-emacs-directory))
-  (org-babel-load-file (expand-file-name "nonwindows.org" user-emacs-directory)))
+    (org-babel-load-file (expand-file-name "windows.org" user-emacs-directory))
+    (org-babel-load-file (expand-file-name "nonwindows.org" user-emacs-directory)))
 
 (if (eq system-type 'darwin)
-  (org-babel-load-file (expand-file-name "macosx.org" user-emacs-directory)))
+    (org-babel-load-file (expand-file-name "macosx.org" user-emacs-directory)))
 
-(if (file-exists-p "local.org")
-  (org-babel-load-file (expand-file-name "local.org" user-emacs-directory)))
+(if (file-exists-p (expand-file-name "local.org" user-emacs-directory))
+    (org-babel-load-file (expand-file-name "local.org" user-emacs-directory)))
 
 (put 'narrow-to-region 'disabled nil)

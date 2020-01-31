@@ -56,6 +56,7 @@
 (add-hook 'focus-out-hook #'garbage-collect)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+(setq js-indent-level 2)
 #+END_SRC
 ** Dired Settings
 #+BEGIN_SRC emacs-lisp
@@ -177,6 +178,14 @@ loaded, if existing.
 (use-package powerline
   :init (powerline-default-theme)
   )
+#+END_SRC
+
+** YAML
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :ensure t
+  )
+
 #+END_SRC
 
 ** Markdown Related
