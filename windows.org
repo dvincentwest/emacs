@@ -4,6 +4,30 @@
 * WindowsSettings
 Some settings are particular to Windows so let's put those here:
 
+** Magit
+#+BEGIN_SRC emacs-lisp
+;; (use-package magit
+;;   :init
+;;   (use-package evil-magit)
+;;   )
+#+END_SRC
+
+** elpy
+#+BEGIN_SRC emacs-lisp
+(setq condadir (concat (getenv "HOME") "\\miniconda3\\"))
+(setq pythonexe (concat condadir "python.exe"))
+(use-package elpy
+  :init
+  (setq python-shell-interpreter pythonexe
+		python-shell-interpreter-args "-i --simple-prompt")
+  (elpy-enable)
+  (setq elpy-rpc-python-command pythonexe)
+  :config
+  (define-key elpy-mode-map (kbd "C-c .") 'elpy-goto-definition)
+  (pyvenv-activate condadir)
+  )
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (setenv "PATH" (concat "C:\\Users\\A3R7LZZ\\Programs\\Cygwin\\bin;" (getenv "PATH")))
 (custom-set-faces
