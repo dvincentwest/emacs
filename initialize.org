@@ -4,12 +4,15 @@
 * Sensible Defaults
 ** Default Settings
 #+BEGIN_SRC emacs-lisp
-(add-hook 'window-setup-hook 'toggle-frame-maximized t)
+;; (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
 ;; inhibit startup screen
 (setq inhibit-startup-screen t
       ;; Show *scratch* on start
       initial-buffer-choice t)
+
+;; replace default buffer-list with something I like better
+(global-set-key "\C-x\C-b" 'buffer-menu)
 
 (setq default-directory "~/")
 (when (version<= "26.0.50" emacs-version )
@@ -29,10 +32,13 @@
 (setq line-number-mode t)                         ; Enable line numbers in the mode-line
 (setq column-number-mode t)                       ; Enable column numbers in the mode-line
 (setq show-paren-mode t)                          ; Highlight matching parentheses
+(set-default 'truncate-lines t)
 (show-paren-mode)
 
 (prefer-coding-system 'utf-8)
 (setq fill-column 80)
+(setq-default fill-column 80)
+(set-fill-column 80)
 (column-number-mode)
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -52,6 +58,8 @@
 ; Garbage-collect on focus-out, Emacs /should/ feel snappier.
 (add-hook 'focus-out-hook #'garbage-collect)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+(setq js-indent-level 2)
 #+END_SRC
 ** Dired Settings
 #+BEGIN_SRC emacs-lisp
@@ -94,8 +102,8 @@
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
   (setq
    org-startup-indented 1
-   org-blank-before-new-entry '((heading . auto)
-							   (plain-list-item . auto))
+   ;; org-blank-before-new-entry '((heading . auto)
+   ;; 							   (plain-list-item . auto))
    org-src-fontify-natively t
    org-src-preserve-indentation t
    org-src-tab-acts-natively t
@@ -157,6 +165,55 @@
   )
 #+END_SRC
 
+** YAML
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :ensure t
+  )
+
+#+END_SRC
+
+** Markdown Related
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command
+		      (concat
+		       "pandoc"
+		       " --from=markdown --to=html"
+		       " --standalone --mathjax --highlight-style=pygments"))
+		(setq markdown-xhtml-header-content
+			  (concat "<script type=\"text/javascript\" async"
+					  " src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/"
+					  "2.7.1/MathJax.js?config=TeX-MML-AM_CHTML\">"
+					  "</script>"))
+		)
+
+(use-package markdown-toc
+  :ensure t
+  )
+
+(use-package mmm-mode
+  :init
+  (defun my-mmm-markdown-auto-class (lang &optional submode)
+    "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
+    If SUBMODE is not provided, use `LANG-mode' by default."
+    (let ((class (intern (concat "markdown-" lang)))
+	  (submode (or submode (intern (concat lang "-mode"))))
+	  (front (concat "^```" lang "[\n\r]+"))
+	  (back "^```"))
+      (mmm-add-classes (list (list class :submode submode :front front :back back)))
+      (mmm-add-mode-ext-class 'markdown-mode nil class)))
+  (setq mmm-global-mode 'maybe) ;; Mode names that derive directly from the language name
+  (mapc 'my-mmm-markdown-auto-class
+	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
+	  "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
+  )
+#+END_SRC
 * Functions
 #+BEGIN_SRC emacs-lisp
 (defun comment-or-uncomment-region-or-line ()
@@ -175,4 +232,22 @@
 #+BEGIN_SRC emacs-lisp
 ; can have some trouble with fonts if this isn't set
 (define-key special-event-map [config-changed-event] #'ignore)
+
+(setq fortran-line-length 120)
+
+(add-hook
+ 'c++-mode-hook
+ (lambda () (when (file-remote-p default-directory) (company-mode -1))))
+#+END_SRC
+
+* Site-Specific
+
+Look for a file, `custom_byhand.el` in the `.emacs.d` directory that
+would contain non-git-tracked customizations
+
+#+BEGIN_SRC emacs-lisp
+
+(defvar site-el (expand-file-name "custom_byhand.el" user-emacs-directory))
+(if (file-exists-p site-el) (load-file site-el))
+
 #+END_SRC
