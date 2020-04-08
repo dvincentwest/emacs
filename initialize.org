@@ -117,8 +117,8 @@ loaded, if existing.
   (add-hook 'org-mode-hook 'turn-on-auto-fill)
   (setq
    org-startup-indented 1
-   org-blank-before-new-entry '((heading . auto)
-							   (plain-list-item . auto))
+   ;; org-blank-before-new-entry '((heading . auto)
+   ;; 							   (plain-list-item . auto))
    org-src-fontify-natively t
    org-src-preserve-indentation t
    org-src-tab-acts-natively t
@@ -249,6 +249,10 @@ loaded, if existing.
 (define-key special-event-map [config-changed-event] #'ignore)
 
 (setq fortran-line-length 120)
+
+(add-hook
+ 'c++-mode-hook
+ (lambda () (when (file-remote-p default-directory) (company-mode -1))))
 #+END_SRC
 
 * Site-Specific

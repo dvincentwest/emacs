@@ -62,3 +62,9 @@
 #+BEGIN_SRC emacs-lisp
 (use-package ranger)
 #+END_SRC
+
+* Settings
+
+#+BEGIN_SRC emacs-lisp
+(server-start)
+#+END_SRC
