@@ -23,3 +23,8 @@
 	(org-babel-load-file (expand-file-name "windows.org" user-emacs-directory))
 	(org-babel-load-file (expand-file-name "nonwindows.org" user-emacs-directory))
   )
+
+;; place all custom settings at the end here
+(setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
+(when (file-exists-p custom-file)
+  (load custom-file))
