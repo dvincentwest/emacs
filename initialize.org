@@ -11,6 +11,9 @@
       ;; Show *scratch* on start
       initial-buffer-choice t)
 
+;; replace default buffer-list with something I like better
+(global-set-key "\C-x\C-b" 'buffer-menu)
+
 (setq default-directory "~/")
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
