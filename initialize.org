@@ -188,6 +188,7 @@ loaded, if existing.
 (use-package yaml-mode
   :ensure t
   )
+(add-hook 'yaml-mode-hook (lambda() (setq evil-shift-width 2)))
 
 #+END_SRC
 
@@ -244,6 +245,13 @@ loaded, if existing.
     (comment-or-uncomment-region beg end)))
 
 (global-set-key (kbd "C-/") 'comment-or-uncomment-region-or-line)
+
+(defun get-math-result ()
+  "Replace sexp before point by result of its evaluation."
+  (interactive)
+  (let ((result  (pp-to-string (eval (pp-last-sexp) lexical-binding))))
+    (delete-region (save-excursion (backward-sexp) (point)) (point))
+    (insert result)))
 #+END_SRC
 
 * Miscellaneous

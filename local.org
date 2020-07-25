@@ -1,0 +1,9 @@
+#+TITLE: Local to this computer Customizations
+
+#+BEGIN_SRC emacs-lisp
+
+(pyvenv-activate "/Users/a3r7lzz/miniconda3/")
+(setenv "PATH" (concat ":/Library/TeX/texbin:/usr/local/bin:" (getenv "PATH") ))
+(setq exec-path (append '("/Library/TeX/texbin" "/usr/local/bin") exec-path))
+
+#+END_SRC

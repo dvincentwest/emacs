@@ -1,21 +1,14 @@
 #+TITLE: Emacs Iniitalization for Mac OSX specifically
 
 #+BEGIN_SRC emacs-lisp
-(setenv "PATH" (concat (getenv "PATH") ":/Library/TeX/texbin"))
-(setq exec-path (append '("/Library/TeX/texbin") exec-path))
-#+END_SRC
+;; (use-package exec-path-from-shell
+;;   :ensure t
+;;   )
+;; (exec-path-from-shell-initialize)
 
+(setenv "PATH" (concat ":/Library/TeX/texbin:/usr/local/bin:" (getenv "PATH") ))
+(setq exec-path (append '("/Library/TeX/texbin" "/usr/local/bin") exec-path))
 
-#+BEGIN_SRC emacs-lisp
-(use-package exec-path-from-shell
-  :ensure t
-  )
-(exec-path-from-shell-initialize)
-
-(use-package flycheck
-  :ensure t
-  )
-(add-hook 'c++-mode-hook 'flycheck-mode)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp

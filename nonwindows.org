@@ -11,8 +11,9 @@
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   )
-(projectile-mode)
+(projectile-mode +1)
 (counsel-projectile-mode)
+(define-key projectile-mode-map (kbd "C-c C-p") 'projectile-command-map)
 #+END_SRC
 
 ** Ag
@@ -63,7 +64,34 @@
 (use-package ranger)
 #+END_SRC
 
+** Flycheck
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  )
+(add-hook 'c++-mode-hook 'flycheck-mode)
+(add-hook 'fortran-mode-hook 'flycheck-mode)
+(add-hook 'f90-mode-hook 'flycheck-mode)
+(setq-default flycheck-gfortran-language-standard "gnu")
+#+END_SRC
 * Settings
+
+** C++ Mode
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'c++-mode-hook (lambda() (setq evil-shift-width 2)))
+#+END_SRC
+
+** Fortran Mode
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'fortran-mode-hook (lambda() (setq evil-shift-width 2)))
+(add-hook 'f90-mode-hook (lambda() (setq evil-shift-width 2)))
+(setq flycheck-gfortran-args '("-ffixed-line-length-120"))
+(add-hook 'f90-mode-hook (lambda() (define-key f90-mode-map (kbd "C-c .") 'xref-find-definitions)))
+#+END_SRC
+
+** Misc
 
 #+BEGIN_SRC emacs-lisp
 (server-start)
