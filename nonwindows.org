@@ -38,13 +38,16 @@
   (elpy-enable)
   (if (not (eq system-type 'windows-nt))
   	  (setq elpy-rpc-python-command "~/miniconda3/bin/python")
-  	  ;; (setq python-shell-interpreter "ipython")
+    ;; (setq python-shell-interpreter "ipython")
   	)
   :config
-  (define-key elpy-mode-map (kbd "C-c .") 'elpy-goto-definition)
+  ;; (define-key elpy-mode-map (kbd "C-c .") 'elpy-goto-definition)
   (pyvenv-activate "~/miniconda3/bin/")
+  :bind (:map elpy-mode-map
+         ("C-s-S-l" . elpy-black-fix-code)
+         ("C-c ." . elpy-goto-definition)
+         )
   )
-
 #+END_SRC
 ** Ledger-Mode
 #+BEGIN_SRC emacs-lisp
@@ -88,7 +91,6 @@
 (add-hook 'fortran-mode-hook (lambda() (setq evil-shift-width 2)))
 (add-hook 'f90-mode-hook (lambda() (setq evil-shift-width 2)))
 (setq flycheck-gfortran-args '("-ffixed-line-length-120"))
-(add-hook 'f90-mode-hook (lambda() (define-key f90-mode-map (kbd "C-c .") 'xref-find-definitions)))
 #+END_SRC
 
 ** Misc
