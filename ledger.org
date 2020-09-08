@@ -1,0 +1,6 @@
+* initialize ledger utils
+
+#+BEGIN_SRC emacs-lisp
+(when (file-exists-p (expand-file-name "~/Dropbox/family/Finances/Ledger/get_missing.el"))
+  (load (expand-file-name "~/Dropbox/family/Finances/Ledger/get_missing.el")))
+#+END_SRC
