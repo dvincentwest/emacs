@@ -77,7 +77,7 @@
   ;; :defer t  ; use if you don't want to load the theme
   )
 ;; (load-theme 'deeper-blue)
-;; # (load-theme 'zenburn)
+(enable-theme 'zenburn)
 #+END_SRC
 
 * Packages
@@ -250,7 +250,7 @@
 ; can have some trouble with fonts if this isn't set
 (define-key special-event-map [config-changed-event] #'ignore)
 
-(setq fortran-line-length 120)
+(setq fortran-line-length nil)
 
 (add-hook
  'c++-mode-hook
