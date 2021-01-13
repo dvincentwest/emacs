@@ -83,6 +83,9 @@
 * Packages
 ** Evil Mode
 #+BEGIN_SRC emacs-lisp
+(use-package undo-tree)
+(global-undo-tree-mode)
+
 (use-package evil
   :init
   (setq
@@ -91,6 +94,7 @@
   :config
   (evil-mode)
   )
+(evil-set-undo-system 'undo-tree)
 
 (use-package evil-surround
   :ensure t
