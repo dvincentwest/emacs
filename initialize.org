@@ -79,7 +79,7 @@
 (use-package color-theme-sanityinc-tomorrow
   ;; :ensure t
   )
-;; (load-theme 'sanityinc-tomorrow-eighties)
+(load-theme 'sanityinc-tomorrow-eighties)
 ;; (load-theme 'deeper-blue)
 ;; (enable-theme 'zenburn)
 
@@ -91,15 +91,25 @@
 (use-package undo-tree)
 (global-undo-tree-mode)
 
+;; (setq evil-want-keybinding nil)
 (use-package evil
   :init
   (setq
+   evil-want-integration t  ;; This is optional since it's already set to t by default.
+   evil-want-keybinding nil
    evil-want-C-u-scroll nil
-   evil-search-module 'evil-search)
+   evil-search-module 'evil-search
+   )
   :config
   (evil-mode)
   )
 (evil-set-undo-system 'undo-tree)
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
 
 (use-package evil-surround
   :ensure t

@@ -24,8 +24,7 @@
 ** Magit
 #+BEGIN_SRC emacs-lisp
 (use-package magit
-  :init
-  (use-package evil-magit)
+  ;; :init
   )
 #+END_SRC
 

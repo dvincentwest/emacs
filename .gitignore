@@ -11,3 +11,4 @@ windows.el
 nonwindows.el
 macosx.el
 local.el
+network-security.data
