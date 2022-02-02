@@ -1,18 +1,8 @@
 #+TITLE: Emacs Iniitalization for Mac OSX specifically
 
 #+BEGIN_SRC emacs-lisp
-;; (use-package exec-path-from-shell
-;;   :ensure t
-;;   )
-;; (exec-path-from-shell-initialize)
-
-(setenv "PATH" (concat ":/Library/TeX/texbin:/usr/local/bin:" (getenv "PATH") ))
-(setq exec-path (append '("/Library/TeX/texbin" "/usr/local/bin") exec-path))
-
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
 (menu-bar-mode)
 (set-face-attribute 'default nil :family "Monaco")
 (set-face-attribute 'default nil :height 130)
+
 #+END_SRC

@@ -20,7 +20,7 @@
   (global-display-line-numbers-mode))
 
 (when window-system
-  ;(blink-cursor-mode 0)                          ; Disable the cursor blinking
+  ;; (blink-cursor-mode 0)                          ; Disable the cursor blinking
   (scroll-bar-mode 0)                             ; Disable the scroll bar
   (tool-bar-mode 0)                               ; Disable the tool bar
   (tooltip-mode 0))                               ; Disable the tooltips
@@ -57,7 +57,7 @@
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 (global-set-key (kbd "C-S-b") 'ibuffer)
 
-; Garbage-collect on focus-out, Emacs /should/ feel snappier.
+;; Garbage-collect on focus-out, Emacs /should/ feel snappier.
 (add-hook 'focus-out-hook #'garbage-collect)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -73,11 +73,16 @@
 ;; Other than loading the theme, I prefer to set font attributes
 ;; via the menu which then gets saved to custom.el
 (use-package zenburn-theme
-  :ensure t
+  ;; :ensure t
   ;; :defer t  ; use if you don't want to load the theme
   )
+(use-package color-theme-sanityinc-tomorrow
+  ;; :ensure t
+  )
+;; (load-theme 'sanityinc-tomorrow-eighties)
 ;; (load-theme 'deeper-blue)
-(enable-theme 'zenburn)
+;; (enable-theme 'zenburn)
+
 #+END_SRC
 
 * Packages
@@ -146,7 +151,7 @@
 (use-package counsel :init)
 (use-package swiper :init)
 (use-package counsel-projectile :init)
-  #+END_SRC
+#+END_SRC
 
 ** Company
 #+BEGIN_SRC emacs-lisp
@@ -177,6 +182,12 @@
 
 #+END_SRC
 
+** JSON Mode
+#+begin_src emacs-lisp
+(use-package json-mode
+  )
+#+end_src
+
 ** Markdown Related
 #+BEGIN_SRC emacs-lisp
 (use-package markdown-mode
@@ -190,12 +201,12 @@
 		       "pandoc"
 		       " --from=markdown --to=html"
 		       " --standalone --mathjax --highlight-style=pygments"))
-		(setq markdown-xhtml-header-content
-			  (concat "<script type=\"text/javascript\" async"
-					  " src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/"
-					  "2.7.1/MathJax.js?config=TeX-MML-AM_CHTML\">"
-					  "</script>"))
-		)
+  (setq markdown-xhtml-header-content
+		(concat "<script type=\"text/javascript\" async"
+				" src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/"
+				"2.7.1/MathJax.js?config=TeX-MML-AM_CHTML\">"
+				"</script>"))
+  )
 
 (use-package markdown-toc
   :ensure t
@@ -207,15 +218,15 @@
     "Define a mmm-mode class for LANG in `markdown-mode' using SUBMODE.
     If SUBMODE is not provided, use `LANG-mode' by default."
     (let ((class (intern (concat "markdown-" lang)))
-	  (submode (or submode (intern (concat lang "-mode"))))
-	  (front (concat "^```" lang "[\n\r]+"))
-	  (back "^```"))
+	      (submode (or submode (intern (concat lang "-mode"))))
+	      (front (concat "^```" lang "[\n\r]+"))
+	      (back "^```"))
       (mmm-add-classes (list (list class :submode submode :front front :back back)))
       (mmm-add-mode-ext-class 'markdown-mode nil class)))
   (setq mmm-global-mode 'maybe) ;; Mode names that derive directly from the language name
   (mapc 'my-mmm-markdown-auto-class
-	'("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
-	  "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
+	    '("awk" "bibtex" "c" "cpp" "css" "html" "latex" "lisp" "makefile"
+	      "markdown" "python" "r" "ruby" "sql" "stata" "xml"))
   )
 #+END_SRC
 * Functions
@@ -231,7 +242,7 @@
   (interactive)
   (let (beg end)
     (if (region-active-p)
-	(setq beg (region-beginning) end (region-end))
+	    (setq beg (region-beginning) end (region-end))
       (setq beg (line-beginning-position) end (line-end-position)))
     (comment-or-uncomment-region beg end)))
 
@@ -244,13 +255,12 @@
     (delete-region (save-excursion (backward-sexp) (point)) (point))
     (insert result)))
 #+END_SRC
-
 * Miscellaneous
 #+BEGIN_SRC emacs-lisp
-; can have some trouble with fonts if this isn't set
+                                        ; can have some trouble with fonts if this isn't set
 (define-key special-event-map [config-changed-event] #'ignore)
 
-(setq fortran-line-length nil)
+(setq fortran-line-length 256)
 
 (add-hook
  'c++-mode-hook
@@ -268,3 +278,8 @@ would contain non-git-tracked customizations
 (if (file-exists-p site-el) (load-file site-el))
 
 #+END_SRC
+* OrgModeTemplates
+
+#+begin_src emacs-lisp
+(add-to-list 'org-structure-template-alist '("p" . "src python"))
+#+end_src
