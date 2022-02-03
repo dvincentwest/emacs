@@ -33,3 +33,7 @@
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file)
   (load custom-file))
+
+;; lastly load the theme after marked safe by custom.el
+(if (file-exists-p (expand-file-name "theme.org" user-emacs-directory))
+    (org-babel-load-file (expand-file-name "theme.org" user-emacs-directory)))
