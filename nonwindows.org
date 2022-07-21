@@ -29,25 +29,35 @@
 #+END_SRC
 
 ** elpy
+
+Deprecated for now as I try python-lsp-server instead
+
 #+BEGIN_SRC emacs-lisp
-(use-package elpy
-  :init
-  (setq python-shell-interpreter "~/miniconda3/bin/ipython"
-		python-shell-interpreter-args "-i --simple-prompt")
-  (elpy-enable)
-  (if (not (eq system-type 'windows-nt))
-  	  (setq elpy-rpc-python-command "~/miniconda3/bin/python")
-    ;; (setq python-shell-interpreter "ipython")
-  	)
-  :config
-  ;; (define-key elpy-mode-map (kbd "C-c .") 'elpy-goto-definition)
-  (pyvenv-activate "~/miniconda3/bin/")
-  :bind (:map elpy-mode-map
-         ("C-s-S-l" . elpy-black-fix-code)
-         ("C-c ." . elpy-goto-definition)
-         )
-  )
+;; (use-package elpy
+;;   :init
+;;   (setq python-shell-interpreter "~/miniconda3/bin/ipython"
+;; 		python-shell-interpreter-args "-i --simple-prompt")
+;;   (elpy-enable)
+;;   (if (not (eq system-type 'windows-nt))
+;;   	  (setq elpy-rpc-python-command "~/miniconda3/bin/python")
+;;     ;; (setq python-shell-interpreter "ipython")
+;;   	)
+;;   :config
+;;   ;; (define-key elpy-mode-map (kbd "C-c .") 'elpy-goto-definition)
+;;   (pyvenv-activate "~/miniconda3/bin/")
+;;   :bind (:map elpy-mode-map
+;;          ("C-s-S-l" . elpy-black-fix-code)
+;;          ("C-c ." . elpy-goto-definition)
+;;          )
+;;   )
 #+END_SRC
+
+** code-cells
+
+#+begin_src emacs-lisp
+(use-package code-cells)
+#+end_src
+
 ** Ledger-Mode
 #+BEGIN_SRC emacs-lisp
 (use-package ledger-mode
@@ -71,11 +81,30 @@
 (use-package flycheck
   :ensure t
   )
-(add-hook 'c++-mode-hook 'flycheck-mode)
+;; (add-hook 'c++-mode-hook 'flycheck-mode)
 (add-hook 'fortran-mode-hook 'flycheck-mode)
 (add-hook 'f90-mode-hook 'flycheck-mode)
 (setq-default flycheck-gfortran-language-standard "gnu")
 #+END_SRC
+
+** Eglot
+#+BEGIN_SRC emacs-lisp
+(use-package eglot
+  :ensure t
+  )
+(add-hook 'c++-mode-hook 'eglot-ensure)
+(add-hook 'python-mode-hook 'eglot-ensure)
+#+END_SRC
+
+** opencl-mode
+#+begin_src emacs-lisp
+(use-package opencl-mode)
+#+end_src
+
+** RealGUD
+#+begin_src emacs-lisp
+(use-package realgud)
+#+end_src
 * Settings
 
 ** C++ Mode
