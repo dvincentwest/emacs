@@ -6,46 +6,38 @@
 #+BEGIN_SRC emacs-lisp
 ;; (add-hook 'window-setup-hook 'toggle-frame-maximized t)
 
-;; inhibit startup screen
 (setq inhibit-startup-screen t
-      ;; Show *scratch* on start
-      initial-buffer-choice t)
-
-;; replace default buffer-list with something I like better
-(global-set-key "\C-x\C-b" 'buffer-menu)
-(global-set-key (kbd "C-c .") 'xref-find-definitions)
+      initial-buffer-choice t)  ;; Show *scratch* on start
 
 (setq default-directory "~/")
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
 
 (when window-system
-  ;; (blink-cursor-mode 0)                          ; Disable the cursor blinking
+  ;; (blink-cursor-mode 0)                           ; Disable the cursor blinking
   (scroll-bar-mode 0)                             ; Disable the scroll bar
   (tool-bar-mode 0)                               ; Disable the tool bar
-  (tooltip-mode 0))                               ; Disable the tooltips
+  (tooltip-mode 0)                               ; Disable the tooltips
+  )
 
 (setq tool-bar-mode nil)
 (menu-bar-mode -1)
-(setq-default
- mode-require-final-newline 'visit-save           ; Add a newline at EOF on visit-save
- tab-width 4)                                     ; Set width for tabs
+(setq-default mode-require-final-newline 'visit-save) ; Add a newline at EOF on visit-save
+(setq-default tab-width 4)                        ; Set width for tabs
 (setq-default indent-tabs-mode nil)               ; Normally don't use tabs
 (setq line-number-mode t)                         ; Enable line numbers in the mode-line
 (setq column-number-mode t)                       ; Enable column numbers in the mode-line
 (setq show-paren-mode t)                          ; Highlight matching parentheses
 (set-default 'truncate-lines t)
 (show-paren-mode)
-
 (setq undo-tree-auto-save-history nil)            ; Prevent Emacs from dumping undo-tree files everywhere
-
 (prefer-coding-system 'utf-8)
-(setq fill-column 80)
 (setq-default fill-column 80)
-(set-fill-column 80)
-(column-number-mode)
+(global-set-key "\C-x\C-b" 'buffer-menu)          ; replace default buffer-list with something I like better
+
 (autoload 'ansi-color-for-comint-mode-on "ansi-color" nil t)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
 ;; scrolling options
 ;; scroll one line at a time (less "jumpy" than defaults)
 (setq mouse-wheel-scroll-amount '(4 ((shift) . 10))) ;; one line at a time
@@ -54,6 +46,7 @@
 (setq scroll-step 1) ;; keyboard scroll one line at a time
 (setq backup-directory-alist  ;; backup files go in a dedicated directory
       `(("." . ,(concat user-emacs-directory "backups"))))
+
 (recentf-mode 1)
 (setq recentf-max-menu-items 25)
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -63,14 +56,33 @@
 (add-hook 'focus-out-hook #'garbage-collect)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; jsavascript/json settings
 (setq js-indent-level 2)
+
+;; Python-mode settings
+(setq-default python-indent-def-block-scale 1)  ;; make def blocks have the same indentation level, 2 is default for some reason
+
+;; make underscores part of a word
+(add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+(add-hook 'python-mode-hook #'(lambda () (global-set-key (kbd "C-c n") 'flymake-goto-next-error)))djkj
+;; For all modes
+;; (add-hook 'after-change-major-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+
+;; compile command optiond
+(make-variable-buffer-local 'compile-command)
+(global-set-key (kbd "C-x m") 'compile)
+
+(global-set-key (kbd "C-c .") 'xref-find-definitions)
 #+END_SRC
 ** Dired Settings
 #+BEGIN_SRC emacs-lisp
 (put 'dired-find-alternate-file 'disabled nil)
 #+END_SRC
-
-
+** Python Settings
+#+begin_src emacs-lisp
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython"))
+#+end_src
 * Packages
 ** Evil Mode
 #+BEGIN_SRC emacs-lisp
@@ -96,21 +108,13 @@
   :ensure t
   :config
   (evil-collection-init))
+  (global-set-key (kbd "C-S-u") 'evil-scroll-up)
 
 (use-package evil-surround
   :ensure t
   :config
   (global-evil-surround-mode 1))
 #+END_SRC
-** Vimish Fold
-#+begin_src emacs-lisp
-(use-package vimish-fold)
-(vimish-fold-global-mode 1)
-#+end_src
-** Origami Mode
-#+begin_src emacs-lisp
-(use-package origami)
-#+end_src
 ** Org Mode
 #+BEGIN_SRC emacs-lisp
 (use-package org
@@ -190,6 +194,10 @@
 
 #+END_SRC
 
+** TOML
+#+begin_src emacs-lisp
+(use-package toml-mode)
+#+end_src
 ** JSON Mode
 #+begin_src emacs-lisp
 (use-package json-mode
@@ -242,9 +250,14 @@
 
 #+begin_src emacs-lisp
 (use-package cmake-mode
-  :ensure t)
+  :ensure t
+  :custom
+  (cmake-tab-width 4 "I like wider tabs")
+  )
 #+end_src
 
+** Code-Cells Mode
+(use-package code-cells)
 * Functions
 #+BEGIN_SRC emacs-lisp
 (defun indent-buffer ()

@@ -28,30 +28,6 @@
   )
 #+END_SRC
 
-** elpy
-
-Deprecated for now as I try python-lsp-server instead
-
-#+BEGIN_SRC emacs-lisp
-;; (use-package elpy
-;;   :init
-;;   (setq python-shell-interpreter "~/miniconda3/bin/ipython"
-;; 		python-shell-interpreter-args "-i --simple-prompt")
-;;   (elpy-enable)
-;;   (if (not (eq system-type 'windows-nt))
-;;   	  (setq elpy-rpc-python-command "~/miniconda3/bin/python")
-;;     ;; (setq python-shell-interpreter "ipython")
-;;   	)
-;;   :config
-;;   ;; (define-key elpy-mode-map (kbd "C-c .") 'elpy-goto-definition)
-;;   (pyvenv-activate "~/miniconda3/bin/")
-;;   :bind (:map elpy-mode-map
-;;          ("C-s-S-l" . elpy-black-fix-code)
-;;          ("C-c ." . elpy-goto-definition)
-;;          )
-;;   )
-#+END_SRC
-
 ** code-cells
 
 #+begin_src emacs-lisp
@@ -92,10 +68,20 @@ Deprecated for now as I try python-lsp-server instead
 (use-package eglot
   :ensure t
   )
+(add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 (add-hook 'python-mode-hook 'eglot-ensure)
 #+END_SRC
 
+** Python-Black
+#+begin_src emacs-lisp
+(use-package python-black
+  :demand t
+  :after python)
+
+(add-hook 'python-mode-hook (lambda () (local-set-key (kbd "C-S-s-l") #'python-black-buffer)))
+
+#+end_src
 ** opencl-mode
 #+begin_src emacs-lisp
 (use-package opencl-mode)

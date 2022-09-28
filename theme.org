@@ -17,5 +17,6 @@ occurred marking the theme as safe
   :defer t
   )
 (load-theme 'sanityinc-tomorrow-eighties)
+;; (load-theme 'adwaita)
 
 #+END_SRC

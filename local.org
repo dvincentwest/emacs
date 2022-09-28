@@ -2,9 +2,12 @@
 
 #+BEGIN_SRC emacs-lisp
 
-(pyvenv-activate "/Users/a3r7lzz/miniconda3/")
+(pyvenv-activate "/Users/vince/Coding/hpcopt/hpcopt/")
 
 (setenv "PATH" (concat ":/Library/TeX/texbin:/Users/a3r7lzz/Coding/fortrace/bin:/usr/local/bin:" (getenv "PATH") ))
 (setq exec-path (append '("/Library/TeX/texbin" "/Users/a3r7lzz/Coding/fortrace/bin" "/usr/local/bin") exec-path))
+;; (setq python-shell-interpreter "ipython")
+;; (set-face-attribute 'default nil :family "Ub;; untu Mono")
+;; (set-face-attribute 'default nil :height 160)
 
 #+END_SRC
