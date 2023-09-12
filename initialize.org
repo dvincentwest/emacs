@@ -64,7 +64,7 @@
 
 ;; make underscores part of a word
 (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
-(add-hook 'python-mode-hook #'(lambda () (global-set-key (kbd "C-c n") 'flymake-goto-next-error)))djkj
+(add-hook 'python-mode-hook #'(lambda () (global-set-key (kbd "C-c n") 'flymake-goto-next-error)))
 ;; For all modes
 ;; (add-hook 'after-change-major-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
 

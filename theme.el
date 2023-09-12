@@ -1,11 +1,3 @@
-# Set the theme
-
-We set the theme here because we want it to load after custom-set-variables has
-occurred marking the theme as safe
-
-** Appearance
-
-#+BEGIN_SRC emacs-lisp
 ;; Other than loading the theme, I prefer to set font attributes
 ;; via the menu which then gets saved to custom.el
 (use-package zenburn-theme
@@ -25,6 +17,3 @@ occurred marking the theme as safe
 (load-theme 'sanityinc-tomorrow-eighties)
 ;; (load-theme 'adwaita)
 ;; (load-theme 'immaterial-light)
-
-
-#+END_SRC
